@@ -71,7 +71,7 @@ PlayerSettings:
   n3dsDisableStereoscopicView: 0
   n3dsEnableSharedListOpt: 1
   n3dsEnableVSync: 0
-  uiUse16BitDepthBuffer: 0
+  uiUse16BitDepthBuffer: 1
   ignoreAlphaClear: 0
   xboxOneResolution: 0
   xboxOneMonoLoggingLevel: 0
@@ -177,7 +177,13 @@ PlayerSettings:
     banner: {fileID: 0}
   androidGamepadSupportLevel: 0
   resolutionDialogBanner: {fileID: 0}
-  m_BuildTargetIcons: []
+  m_BuildTargetIcons:
+  - m_BuildTarget: 
+    m_Icons:
+    - serializedVersion: 2
+      m_Icon: {fileID: 0}
+      m_Width: 128
+      m_Height: 128
   m_BuildTargetBatching: []
   m_BuildTargetGraphicsAPIs:
   - m_BuildTarget: AndroidPlayer
@@ -353,7 +359,7 @@ PlayerSettings:
   metroCertificateNotAfter: 0000000000000000
   metroApplicationDescription: hololens-pdx16gamejam
   wsaImages: {}
-  metroTileShortName: 
+  metroTileShortName: hololens-pdx16gamejam
   metroCommandLineArgsFile: 
   metroTileShowName: 0
   metroMediumTileShowName: 0
@@ -455,7 +461,7 @@ PlayerSettings:
   - iOS::VR::enable
   - tvOS::VR::enable
   Android::VR::enable: 0
-  Metro::VR::enable: 0
+  Metro::VR::enable: 1
   N3DS::VR::enable: 0
   PS3::VR::enable: 0
   PS4::VR::enable: 0
