@@ -26,17 +26,15 @@ public class GameTile : MonoBehaviour {
 		transform.FindChild ("Cube44").GetComponent<Renderer> ().material.color = data.colorAt (VirtualTile.SQUARE44);
 	}
 
-	// Use this for initialization
-	void Start () {
-		/*Material m = new Material(Shader.Find("HoloToolkit/StandardFast"));
-		m.color = VirtualTile.colorless;
-
-		foreach (Transform child in GetComponentInChildren<Transform>()) {
-			child.GetComponent<Renderer>().material = m;
-		}*/
-			
+	public void init() {
 		data = new VirtualTile (0, 0, 0);
 		ApplyColors ();
+	}
+
+	// Use this for initialization
+	void Start () {
+			
+		init ();
 		halo = (Behaviour)GetComponent ("Halo");
 		SetActive (false);
 	}
@@ -52,19 +50,16 @@ public class GameTile : MonoBehaviour {
 
 	}
 
-    /*
-    void OnCollisionEnter(Collision collision)
-    {
-        Debug.Log("collision with " + gameObject.name + " and " + collision.gameObject.name);
-
-    }*/
-
-    public void mergeWith(VirtualTile v, VirtualTile.Orientation orientation) {
+	public void mergeWith(VirtualTile v, VirtualTile.Orientation orientation) {
 		data.merge (v, orientation);
 		ApplyColors ();
 	}
 
 	public bool canMergeWith(VirtualTile v, VirtualTile.Orientation orientation) {
 		return data.canMerge (v, orientation);
+	}
+
+	public VirtualTile GetData() {
+		return data;
 	}
 }

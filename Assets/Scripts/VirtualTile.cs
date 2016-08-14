@@ -9,13 +9,13 @@ public class VirtualTile  {
 	
 	public enum Orientation {Up = 0, Clockwise90 = 1, UpsideDown = 2, CounterClockwise90 = 3};
 
-	public static Color red = Color.red;
-	public static Color orange = new Color(1.0F, 0.65F, 0F);
-	public static Color yellow = Color.yellow;
-	public static Color green = Color.green;
-	public static Color blue = Color.blue;
-	public static Color violet = new Color (0.3F, 0, 0.5F);
-	public static Color colorless = Color.grey;
+	public static Color red = new Color(0.87f, 0.36f, 0.26f, 0.9f);
+	public static Color orange = new Color(0.98f, 0.62f, 0.15F, 0.9f);
+	public static Color yellow = new Color (0.91f, 0.86f, 0.29f, 0.9f);
+	public static Color green = new Color(0.34f, 0.64f, 0.34f, 0.9f);
+	public static Color blue = new Color(0.27f, 0.54f, 0.86f, 0.9f);
+	public static Color violet = new Color (0.65F, 0.38f, 0.70f, 0.9f);
+	public static Color colorless = new Color(0.87f, 0.89f, 0.91f, 0.9f);
 
 
 	static ushort ZERO = 0;
@@ -163,6 +163,12 @@ public class VirtualTile  {
 		this.blueComponent = blue;
 	}
 
+	public VirtualTile(VirtualTile toClone) {
+		this.redComponent = toClone.redComponent;
+		this.yellowComponent = toClone.yellowComponent;
+		this.blueComponent = toClone.blueComponent;
+	}
+
 	static bool isOn (ushort input, ushort mask)
 	{
 		return (input & mask) == mask;
@@ -279,5 +285,28 @@ public class VirtualTile  {
 			return yellow;
 		}
 		return colorless;
+	}
+
+	public int Score() {
+		return HammingWeight (redComponent) + HammingWeight (blueComponent) + HammingWeight (yellowComponent);
+	}
+
+	public int HammingWeight(int value)
+	{
+		value = value - ((value >> 1) & 0x55555555);
+		value = (value & 0x33333333) + ((value >> 2) & 0x33333333);
+		return (((value + (value >> 4)) & 0x0F0F0F0F) * 0x01010101) >> 24;
+	}
+
+	public bool hasBlue() {
+		return blueComponent != 0;
+	}
+
+	public bool hasRed() {
+		return redComponent != 0;
+	}
+
+	public bool hasYellow() {
+		return yellowComponent != 0;
 	}
 }
