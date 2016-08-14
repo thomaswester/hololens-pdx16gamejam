@@ -57,8 +57,7 @@ QualitySettings:
     particleRaycastBudget: 16
     asyncUploadTimeSlice: 2
     asyncUploadBufferSize: 4
-    excludedTargetPlatforms:
-    - Windows Store Apps
+    excludedTargetPlatforms: []
   - serializedVersion: 2
     name: Simple
     pixelLightCount: 1
@@ -84,8 +83,7 @@ QualitySettings:
     particleRaycastBudget: 64
     asyncUploadTimeSlice: 2
     asyncUploadBufferSize: 4
-    excludedTargetPlatforms:
-    - Windows Store Apps
+    excludedTargetPlatforms: []
   - serializedVersion: 2
     name: Good
     pixelLightCount: 2
@@ -111,8 +109,7 @@ QualitySettings:
     particleRaycastBudget: 256
     asyncUploadTimeSlice: 2
     asyncUploadBufferSize: 4
-    excludedTargetPlatforms:
-    - Windows Store Apps
+    excludedTargetPlatforms: []
   - serializedVersion: 2
     name: Beautiful
     pixelLightCount: 3
@@ -138,8 +135,7 @@ QualitySettings:
     particleRaycastBudget: 1024
     asyncUploadTimeSlice: 2
     asyncUploadBufferSize: 4
-    excludedTargetPlatforms:
-    - Windows Store Apps
+    excludedTargetPlatforms: []
   - serializedVersion: 2
     name: Fantastic
     pixelLightCount: 4
@@ -165,8 +161,7 @@ QualitySettings:
     particleRaycastBudget: 4096
     asyncUploadTimeSlice: 2
     asyncUploadBufferSize: 4
-    excludedTargetPlatforms:
-    - Windows Store Apps
+    excludedTargetPlatforms: []
   m_PerPlatformDefaultQuality:
     Android: 2
     BlackBerry: 2
@@ -183,7 +178,7 @@ QualitySettings:
     Web: 5
     WebGL: 3
     WiiU: 5
-    Windows Store Apps: 0
+    Windows Store Apps: 5
     XBOX360: 5
     XboxOne: 5
     iPhone: 2

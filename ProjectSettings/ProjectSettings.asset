@@ -352,11 +352,11 @@ PlayerSettings:
     14: VUFORIA_WSA_SETTINGS
   metroPackageName: hololens-pdx16gamejam
   metroPackageVersion: 
-  metroCertificatePath: 
+  metroCertificatePath: Assets\WSATestCertificate.pfx
   metroCertificatePassword: 
-  metroCertificateSubject: 
-  metroCertificateIssuer: 
-  metroCertificateNotAfter: 0000000000000000
+  metroCertificateSubject: DefaultCompany
+  metroCertificateIssuer: DefaultCompany
+  metroCertificateNotAfter: 80760fa8b814d301
   metroApplicationDescription: hololens-pdx16gamejam
   wsaImages: {}
   metroTileShortName: hololens-pdx16gamejam

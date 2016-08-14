@@ -28,12 +28,12 @@ public class GameTile : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		Material m = new Material(Shader.Find("Transparent/Diffuse"));
+		/*Material m = new Material(Shader.Find("HoloToolkit/StandardFast"));
 		m.color = VirtualTile.colorless;
 
 		foreach (Transform child in GetComponentInChildren<Transform>()) {
 			child.GetComponent<Renderer>().material = m;
-		}
+		}*/
 			
 		data = new VirtualTile (0, 0, 0);
 		ApplyColors ();
@@ -52,7 +52,14 @@ public class GameTile : MonoBehaviour {
 
 	}
 
-	public void mergeWith(VirtualTile v, VirtualTile.Orientation orientation) {
+    /*
+    void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log("collision with " + gameObject.name + " and " + collision.gameObject.name);
+
+    }*/
+
+    public void mergeWith(VirtualTile v, VirtualTile.Orientation orientation) {
 		data.merge (v, orientation);
 		ApplyColors ();
 	}

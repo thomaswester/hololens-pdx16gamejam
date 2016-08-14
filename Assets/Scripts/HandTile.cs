@@ -47,4 +47,14 @@ public class HandTile : GameTile {
 		}
 			
 	}
+
+    void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("Trigger with " + gameObject.name + " and " + other.gameObject.name);
+        //todo: figure out rotatin from card transform
+
+        MergeWithBoard(other.gameObject.GetComponent<GameTile>());
+
+    }
+
 }

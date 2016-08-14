@@ -5,9 +5,9 @@
     <ImageTarget name="brick_test_04" size="0.127000 0.127000" />
     <ImageTarget name="brick_test_03" size="0.127000 0.127000" />
     <ImageTarget name="brick_test_02" size="0.127000 0.127000" />
-    <ImageTarget name="brick_test_01" size="5.000000 5.000000" />
-    <ImageTarget name="nine" size="0.076200 0.103836" />
-    <ImageTarget name="jack" size="0.076200 0.102108" />
-    <ImageTarget name="ace" size="0.076200 0.102108" />
+    <ImageTarget name="brick_test_01" size="0.127000 0.127000" />
+    <ImageTarget name="nine" size="0.127000 0.160000" />
+    <ImageTarget name="jack" size="0.076200 0.160000" />
+    <ImageTarget name="ace" size="0.076200 0.160000" />
   </Tracking>
 </QCARConfig>
