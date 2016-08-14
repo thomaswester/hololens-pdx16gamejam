@@ -29,6 +29,7 @@ public class PieceDirector : MonoBehaviour {
 		allPlayerPieces [0] = (HandTile) GameObject.Find ("Player1HandTile1").GetComponent<HandTile>();
 		allPlayerPieces [1] = (HandTile) GameObject.Find ("Player1HandTile2").GetComponent<HandTile>();
 		allPlayerPieces [2] = (HandTile) GameObject.Find ("Player1HandTile3").GetComponent<HandTile>();
+        /*
 		allPlayerPieces [3] = (HandTile) GameObject.Find ("Player2HandTile1").GetComponent<HandTile>();
 		allPlayerPieces [4] = (HandTile) GameObject.Find ("Player2HandTile2").GetComponent<HandTile>();
 		allPlayerPieces [5] = (HandTile) GameObject.Find ("Player2HandTile3").GetComponent<HandTile>();
@@ -38,7 +39,7 @@ public class PieceDirector : MonoBehaviour {
 
 		scoreText = GameObject.Find("Score").GetComponent<Text>();
 		gameOverText = GameObject.Find ("GameOver").GetComponent<Text> ();
-		gameOverText.enabled = false;
+		gameOverText.enabled = false;*/
 	}
 
 	void ResetGame() {
