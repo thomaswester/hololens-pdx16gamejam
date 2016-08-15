@@ -62,4 +62,10 @@ public class GameTile : MonoBehaviour {
 	public VirtualTile GetData() {
 		return data;
 	}
+
+    public void SetPieceState(PieceState data)
+    {
+        this.data.SetPieceState(data);
+        ApplyColors();
+    }
 }

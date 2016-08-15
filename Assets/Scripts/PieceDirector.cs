@@ -21,6 +21,8 @@ public class PieceDirector : MonoBehaviour {
 	private Text scoreText;
 	private Text gameOverText;
 
+	public NetworkedClient network;
+
 	// Use this for initialization
 	void Start () {
 		centerBoard1 = (GameTile)GameObject.Find ("CenterGameBoard1").GetComponent<GameTile> ();
@@ -39,7 +41,12 @@ public class PieceDirector : MonoBehaviour {
 
 		scoreText = GameObject.Find("Score").GetComponent<Text>();
 		gameOverText = GameObject.Find ("GameOver").GetComponent<Text> ();
-		gameOverText.enabled = false;*/
+		gameOverText.enabled = false;
+        */
+		if (network != null) {
+			network.OnIncomingEvent += OnIncomingEvent;
+		}
+
 	}
 
 	void ResetGame() {
@@ -176,4 +183,42 @@ public class PieceDirector : MonoBehaviour {
 			activePiece.Reorient (VirtualTile.Orientation.UpsideDown);
 		}
 	}
+
+	public GameState GetGameState() {
+		GameState results = new GameState ();
+		results.boards.Add(centerBoard1.GetData ().GetPieceState ());
+		results.boards.Add(centerBoard2.GetData ().GetPieceState ());
+
+		for (int i=0; i< TOTAL_TILES; i++) {
+            if (allPlayerPieces[i] != null)
+            {
+                results.pieces.Add(allPlayerPieces[i].GetData().GetPieceState());
+            }
+		}
+
+		results.turn = totalTurnCounter;
+
+		return results;
+	}
+
+    public void UpdateGameState(GameState gs)
+    {
+        centerBoard1.SetPieceState(gs.boards[0]);
+        centerBoard2.SetPieceState(gs.boards[1]);
+
+        for (int i = 0; i < TOTAL_TILES; i++)
+        {
+            if (allPlayerPieces[i] != null)
+            {
+                allPlayerPieces[i].SetPieceState(gs.pieces[i]);
+            }
+        }
+        this.totalTurnCounter = gs.turn;
+    }
+
+	private void OnIncomingEvent(object sender, GameEvent e)
+	{
+        UpdateGameState(e.gameState);
+	}
+
 }
