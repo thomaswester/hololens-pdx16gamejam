@@ -43,7 +43,7 @@ public class GameTile : MonoBehaviour {
         for (int i = 0; i < cube.transform.childCount; i++)
         {
             GameObject t = cube.transform.GetChild(i).gameObject;
-            t.SetActive(t.name == cubeTennant ? true : false);           
+            t.SetActive( t.name == cubeTennant ? true : false);           
         }
     }
 

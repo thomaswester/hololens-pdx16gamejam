@@ -99,4 +99,38 @@ public class HandTile : GameTile {
             MergeWithBoard(other.gameObject.GetComponent<GameTile>());
         }
     }
+
+    protected void ApplyColors()
+    {
+        updateLocation("Cube11", VirtualTile.SQUARE11);
+        updateLocation("Cube12", VirtualTile.SQUARE12);
+        updateLocation("Cube13", VirtualTile.SQUARE13);
+        updateLocation("Cube14", VirtualTile.SQUARE14);
+
+        updateLocation("Cube21", VirtualTile.SQUARE21);
+        updateLocation("Cube22", VirtualTile.SQUARE22);
+        updateLocation("Cube23", VirtualTile.SQUARE23);
+        updateLocation("Cube24", VirtualTile.SQUARE24);
+
+        updateLocation("Cube31", VirtualTile.SQUARE31);
+        updateLocation("Cube32", VirtualTile.SQUARE32);
+        updateLocation("Cube33", VirtualTile.SQUARE33);
+        updateLocation("Cube34", VirtualTile.SQUARE34);
+
+        updateLocation("Cube41", VirtualTile.SQUARE41);
+        updateLocation("Cube42", VirtualTile.SQUARE42);
+        updateLocation("Cube43", VirtualTile.SQUARE43);
+        updateLocation("Cube44", VirtualTile.SQUARE44);
+    }
+
+    private void updateLocation(string cubeName, ushort location)
+    {
+        //get the relevant cube
+        GameObject cube = transform.FindChild(cubeName).gameObject;
+
+        Color d = data.colorAt(location);
+        if( d == VirtualTile.colorless) d.a = 0.4f;
+        //set the color
+        cube.GetComponent<Renderer>().material.color = d;
+    }
 }

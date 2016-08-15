@@ -19,8 +19,7 @@ public class VirtualTile  {
 	public static Color violet = new Color (0.65F, 0.38f, 0.70f, 0.9f);
 	public static Color colorless = new Color(0.87f, 0.89f, 0.91f, 0.9f);
 
-
-	static ushort ZERO = 0;
+    static ushort ZERO = 0;
 
 	public static ushort SQUARE11 = 1;
 	public static ushort SQUARE12 = 2;

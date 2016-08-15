@@ -52,7 +52,9 @@ public class HolographicControl : MonoBehaviour {
             // If the raycast hit a hologram, use that as the focused object.
             focusedObject = hitInfo.collider.gameObject;
             Debug.Log("focusedObject is " + focusedObject.name);
-            if( focusedObject.name == "AnchorSphere")
+
+            //we are looking for a very specific object with in the BoardAnchor PreFab
+            if( focusedObject.name == "AnchorVisual")
             {
                 focusedObject.GetComponent<ARAnchor>().Place();
             }

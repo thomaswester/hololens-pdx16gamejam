@@ -74,8 +74,10 @@ public class BoardAnchor : MonoBehaviour {
             }
         }
 
-        //look at the user while placing, follow the gaze
-        gameObject.transform.position = matchMe.transform.position;
+        Vector3 pos = matchMe.transform.position;
+        pos.x += 0.2f;
+
+        gameObject.transform.position = pos;
         
         anchor = gameObject.AddComponent<WorldAnchor>();
         if (anchor.isLocated)
