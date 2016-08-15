@@ -6,10 +6,17 @@ using UnityEngine.VR.WSA.Persistence;
 using UnityEngine.VR.WSA.Input;
 using UnityEngine.VR.WSA;
 
+#if WINDOWS_UWP
+using Windows.Storage;
+using System.Threading.Tasks;
+using Windows.Data.Xml.Dom;
+using System;
+#endif
+
 public class HolographicControl : MonoBehaviour {
 
     GestureRecognizer recognizer;
-
+    
     // Use this for initialization
     void Start()
     {
@@ -57,4 +64,5 @@ public class HolographicControl : MonoBehaviour {
             Debug.Log("focusedObject is null");
         }
     }
+ 
 }

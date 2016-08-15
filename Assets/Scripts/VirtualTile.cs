@@ -297,7 +297,36 @@ public class VirtualTile  {
 		return colorless;
 	}
 
-	public int Score() {
+    public string tennantAt(ushort location)
+    {
+        if (isOn(redComponent, location) && isOn(blueComponent, location))
+        {
+            return "Purple";
+        }
+        if (isOn(redComponent, location) && isOn(yellowComponent, location))
+        {
+            return "Orange";
+        }
+        if (isOn(yellowComponent, location) && isOn(blueComponent, location))
+        {
+            return "Green";
+        }
+        if (isOn(redComponent, location))
+        {
+            return "Red";
+        }
+        if (isOn(blueComponent, location))
+        {
+            return "Blue";
+        }
+        if (isOn(yellowComponent, location))
+        {
+            return "Yellow";
+        }
+        return "";
+    }
+
+    public int Score() {
 		return HammingWeight (redComponent) + HammingWeight (blueComponent) + HammingWeight (yellowComponent);
 	}
 
