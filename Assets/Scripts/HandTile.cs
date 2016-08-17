@@ -83,30 +83,37 @@ public class HandTile : GameTile {
             //todo: figure out rotatin from card transform
             Vector3 vec = transform.eulerAngles;
             vec.y = Mathf.Round(vec.y / 90) * 90;
+            VirtualTile.Orientation orientit = VirtualTile.Orientation.Up;
        
             //Debug.LogFormat("Rotation rounded y:{0}, current y:{1}, /90:{2}", vec.y, transform.eulerAngles.y, vec.y / 90 );
 
             if (vec.y == 0 || vec.y == 360)
             {
                 data = data.reoriented(VirtualTile.Orientation.Up);
+                orientit = VirtualTile.Orientation.Up;
             }
             else if (vec.y == 90)
             {
                 data = data.reoriented(VirtualTile.Orientation.Clockwise90);
+                orientit = VirtualTile.Orientation.Clockwise90;
             }
             else if (vec.y == 180)
             {
                 data = data.reoriented(VirtualTile.Orientation.UpsideDown);
+                orientit = VirtualTile.Orientation.UpsideDown;
             }
             else if (vec.y == 270)
             {
                 data = data.reoriented(VirtualTile.Orientation.CounterClockwise90);
+                orientit = VirtualTile.Orientation.CounterClockwise90;
             }
+
+            Debug.Log("orientation " + orientit);
 
             //todo cleanup which class is responsible for the merge and data sync
             if (director != null)
             {
-                director.MergeRequested(this, other.gameObject.GetComponent<GameTile>(), VirtualTile.Orientation.Up);
+                director.MergeRequested(this, other.gameObject.GetComponent<GameTile>(), orientit);
             }
             else
             {
@@ -144,9 +151,17 @@ public class HandTile : GameTile {
         GameObject cube = transform.FindChild(cubeName).gameObject;
 
         Color d = data.colorAt(location);
-        if( d == VirtualTile.colorless) d.a = 0.4f;
-        //set the color
         cube.GetComponent<Renderer>().material.color = d;
+
+        /*
+        if (d == VirtualTile.colorless)
+        {
+            cube.SetActive(false);
+        }
+        else
+        { 
+            cube.SetActive(true);
+        }*/
     }
 
 	protected virtual void HandleNewTileEvent(VirtualTile e)

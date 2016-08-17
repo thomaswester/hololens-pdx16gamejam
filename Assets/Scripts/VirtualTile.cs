@@ -17,7 +17,7 @@ public class VirtualTile :EventArgs {
 	public static Color green = new Color(0.34f, 0.64f, 0.34f, 0.9f);
 	public static Color blue = new Color(0.27f, 0.54f, 0.86f, 0.9f);
 	public static Color violet = new Color (0.65F, 0.38f, 0.70f, 0.9f);
-	public static Color colorless = new Color(0.4f, 0.4f, 0.4f, 0.5f);
+	public static Color colorless = new Color(0.4f, 0.4f, 0.4f, 0.9f);
 
     static ushort ZERO = 0;
 
