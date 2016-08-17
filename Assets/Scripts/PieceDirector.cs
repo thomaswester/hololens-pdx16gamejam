@@ -131,6 +131,7 @@ public class PieceDirector : MonoBehaviour {
 
 			CheckForGameOver ();
 		} else {
+            Debug.Log("INVALID ACTION");
 			piece.SetActive (false);
 		}
 	}

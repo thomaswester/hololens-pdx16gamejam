@@ -34,10 +34,10 @@ public class NetworkedClient : MonoBehaviour {
 			Debug.Log (www.error);
 		}
 		else {
-			// Show results as text
-			Debug.Log (www.downloadHandler.text);
-			// Or retrieve results as binary data
-			byte[] results = www.downloadHandler.data;
+            // Show results as text
+            Debug.Log (www.downloadHandler.text);
+            // Or retrieve results as binary data
+            byte[] results = www.downloadHandler.data;
 			GameEvent myEvent = GameEvent.fromJson (Encoding.UTF8.GetString (results));
 			Debug.Log ("CLIENT incoming message event received: " + myEvent);
 			HandleIncomingEvent (myEvent);
@@ -128,6 +128,8 @@ public class NetworkedClient : MonoBehaviour {
 	public IEnumerator SendGameSate2 (GameEvent gameState) {
 		pausePolling = true;
 
+        
+
 		string url = "http://" + hostIpAddress + ":" + hostSocket + "/games";
 
 		HttpWebRequest request = (HttpWebRequest)WebRequest.Create (new Uri(url));
@@ -137,6 +139,8 @@ public class NetworkedClient : MonoBehaviour {
 
 		ASCIIEncoding encoding = new ASCIIEncoding ();
 		this.postData = gameState.asJson();
+
+        Debug.Log("POST " + this.postData);
 
         request.BeginGetRequestStream(new AsyncCallback(GetRequestStreamCallback), request);
         yield return new WaitForSeconds(0.050f);
@@ -176,7 +180,7 @@ public class NetworkedClient : MonoBehaviour {
                 {
                     string responseString = streamRead.ReadToEnd();
                     GameEvent myEvent = GameEvent.fromJson(responseString);
-                    Debug.Log("CLIENT incoming message event received: " + myEvent);
+                    //Debug.Log("CLIENT incoming message event received: " + myEvent);
                     HandleIncomingEvent(myEvent);
                 }
             }

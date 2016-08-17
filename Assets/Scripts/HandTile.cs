@@ -14,13 +14,15 @@ public class HandTile : GameTile {
 
     GameObject indicator;
     TextMesh indicatorText;
+    VirtualTile.Orientation currentOrientation;
 
     public void init() {
-
+        /*
         indicator = GameObject.Find("RotateIndicator");
 		if (indicator != null) {
 			indicatorText = indicator.GetComponent<TextMesh> ();
 		}
+        */
 
         data = new VirtualTile ();
 		HandleNewTileEvent (data);
@@ -64,56 +66,51 @@ public class HandTile : GameTile {
 			init ();
 			initalized = true;
 		}
+    }
 
+    void updateOrientation()
+    {
         //todo: figure out rotatin from card transform
         Vector3 vec = transform.eulerAngles;
-        float currentY = vec.y;
-        float snapY = Mathf.Round(vec.y / 90) * 90;
-		if (indicatorText != null) {
-			indicatorText.text = vec.y.ToString ("n") + ", " + snapY.ToString ();
-		}
+        vec.y = Mathf.Round(vec.y / 90) * 90;
+        
+        Debug.LogFormat("Rotation rounded y:{0}, current y:{1}, /90:{2}", vec.y, transform.eulerAngles.y, vec.y / 90 );
 
+        if (vec.y == 0 || vec.y == 360)
+        {
+            //data = data.reoriented(VirtualTile.Orientation.Up);
+            currentOrientation = VirtualTile.Orientation.Up;
+        }
+        else if (vec.y == 90)
+        {
+            //data = data.reoriented(VirtualTile.Orientation.Clockwise90);
+            currentOrientation = VirtualTile.Orientation.Clockwise90;
+        }
+        else if (vec.y == 180)
+        {
+            //data = data.reoriented(VirtualTile.Orientation.UpsideDown);
+            currentOrientation = VirtualTile.Orientation.UpsideDown;
+        }
+        else if (vec.y == 270)
+        {
+            //data = data.reoriented(VirtualTile.Orientation.CounterClockwise90);
+            currentOrientation = VirtualTile.Orientation.CounterClockwise90;
+        }
+
+        Debug.Log("orientation " + currentOrientation);
     }
 
     void OnTriggerEnter(Collider other)
     {
         Debug.Log("Trigger with " + gameObject.name + " and " + other.gameObject.name);
+        updateOrientation();
 
         if (other.gameObject.name.Contains("CenterGameBoard") ) { 
-            //todo: figure out rotatin from card transform
-            Vector3 vec = transform.eulerAngles;
-            vec.y = Mathf.Round(vec.y / 90) * 90;
-            VirtualTile.Orientation orientit = VirtualTile.Orientation.Up;
-       
-            //Debug.LogFormat("Rotation rounded y:{0}, current y:{1}, /90:{2}", vec.y, transform.eulerAngles.y, vec.y / 90 );
-
-            if (vec.y == 0 || vec.y == 360)
-            {
-                data = data.reoriented(VirtualTile.Orientation.Up);
-                orientit = VirtualTile.Orientation.Up;
-            }
-            else if (vec.y == 90)
-            {
-                data = data.reoriented(VirtualTile.Orientation.Clockwise90);
-                orientit = VirtualTile.Orientation.Clockwise90;
-            }
-            else if (vec.y == 180)
-            {
-                data = data.reoriented(VirtualTile.Orientation.UpsideDown);
-                orientit = VirtualTile.Orientation.UpsideDown;
-            }
-            else if (vec.y == 270)
-            {
-                data = data.reoriented(VirtualTile.Orientation.CounterClockwise90);
-                orientit = VirtualTile.Orientation.CounterClockwise90;
-            }
-
-            Debug.Log("orientation " + orientit);
 
             //todo cleanup which class is responsible for the merge and data sync
-            if (director != null)
+             if (director != null)
             {
-                director.MergeRequested(this, other.gameObject.GetComponent<GameTile>(), orientit);
+                director.MergeRequested(this, other.gameObject.GetComponent<GameTile>(), currentOrientation);
             }
             else
             {
