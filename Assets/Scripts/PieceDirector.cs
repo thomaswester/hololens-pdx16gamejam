@@ -101,7 +101,7 @@ public class PieceDirector : MonoBehaviour {
 	{
 		if (network != null) {
 			GameEvent e = new GameEvent (GetGameState ());
-			StartCoroutine (network.SetGameState(e));
+			StartCoroutine (network.SendGameSate2(e));
 		}
 	}
 

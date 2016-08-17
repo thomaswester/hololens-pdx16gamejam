@@ -9,6 +9,7 @@ using UnityEngine.Networking;
 using System.Net;
 using System.IO;
 using System.Text;
+using System.Threading;
 
 public class NetworkedClient : MonoBehaviour {
 
@@ -122,7 +123,7 @@ public class NetworkedClient : MonoBehaviour {
 		}
 	}
 
-    /*
+    
 	//hopefully this works.  or we can figure out how to make the standard POST work.  
 	public IEnumerator SendGameSate2 (GameEvent gameState) {
 		pausePolling = true;
@@ -135,19 +136,52 @@ public class NetworkedClient : MonoBehaviour {
 		request.Method = "POST";
 
 		ASCIIEncoding encoding = new ASCIIEncoding ();
-		byte[] byte1 = encoding.GetBytes (gameState.asJson());
-		//request.ContentLength = byte1.Length;
-		Stream newStream = request.GetRequestStream();
-		yield return new WaitForSeconds(0.001f);
-		newStream.Write (byte1, 0, byte1.Length);
-		newStream.Close ();
+		this.postData = gameState.asJson();
 
-		using (WebResponse response = request.GetResponse ()) {
-			using (Stream stream = response.GetResponseStream ()) {
-				//process the response
-				pausePolling = false;
-			}
-		}
+        request.BeginGetRequestStream(new AsyncCallback(GetRequestStreamCallback), request);
+        yield return new WaitForSeconds(0.050f);
+        pausePolling = false;
     }
-    */
+
+    private string postData;
+
+    private void GetRequestStreamCallback(IAsyncResult asynchronousResult)
+    {
+        HttpWebRequest request = (HttpWebRequest)asynchronousResult.AsyncState;
+
+        // End the operation
+        using (Stream postStream = request.EndGetRequestStream(asynchronousResult))
+        {
+            // Convert the string into a byte array.
+            byte[] byteArray = Encoding.UTF8.GetBytes(postData);
+
+            // Write to the request stream.
+            postStream.Write(byteArray, 0, postData.Length);
+        }
+
+        // Start the asynchronous operation to get the response
+        request.BeginGetResponse(new AsyncCallback(GetResponseCallback), request);
+    }
+
+    private void GetResponseCallback(IAsyncResult asynchronousResult)
+    {
+        HttpWebRequest request = (HttpWebRequest)asynchronousResult.AsyncState;
+
+        // End the operation
+        using (HttpWebResponse response = (HttpWebResponse)request.EndGetResponse(asynchronousResult))
+        {
+            using (Stream streamResponse = response.GetResponseStream())
+            {
+                using (StreamReader streamRead = new StreamReader(streamResponse))
+                {
+                    string responseString = streamRead.ReadToEnd();
+                    GameEvent myEvent = GameEvent.fromJson(responseString);
+                    Debug.Log("CLIENT incoming message event received: " + myEvent);
+                    HandleIncomingEvent(myEvent);
+                }
+            }
+        }
+
+    }
+
 }
