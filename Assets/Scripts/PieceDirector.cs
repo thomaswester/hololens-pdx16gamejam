@@ -31,7 +31,7 @@ public class PieceDirector : MonoBehaviour {
 		allPlayerPieces [0] = (HandTile) GameObject.Find ("Player1HandTile1").GetComponent<HandTile>();
 		allPlayerPieces [1] = (HandTile) GameObject.Find ("Player1HandTile2").GetComponent<HandTile>();
 		allPlayerPieces [2] = (HandTile) GameObject.Find ("Player1HandTile3").GetComponent<HandTile>();
-        /*
+        
 		allPlayerPieces [3] = (HandTile) GameObject.Find ("Player2HandTile1").GetComponent<HandTile>();
 		allPlayerPieces [4] = (HandTile) GameObject.Find ("Player2HandTile2").GetComponent<HandTile>();
 		allPlayerPieces [5] = (HandTile) GameObject.Find ("Player2HandTile3").GetComponent<HandTile>();
@@ -39,14 +39,31 @@ public class PieceDirector : MonoBehaviour {
 		allPlayerPieces [7] = (HandTile) GameObject.Find ("Player3HandTile2").GetComponent<HandTile>();
 		allPlayerPieces [8] = (HandTile) GameObject.Find ("Player3HandTile3").GetComponent<HandTile>();
 
-		scoreText = GameObject.Find("Score").GetComponent<Text>();
-		gameOverText = GameObject.Find ("GameOver").GetComponent<Text> ();
-		gameOverText.enabled = false;
-        */
+        if (GameObject.Find("Score") != null)
+        {
+            scoreText = GameObject.Find("Score").GetComponent<Text>();
+        }
+        if (GameObject.Find("GameOver") != null)
+        {
+            gameOverText = GameObject.Find("GameOver").GetComponent<Text>();
+            if (gameOverText != null)
+            {
+                gameOverText.enabled = false;
+            }
+        }
+
 		if (network != null) {
 			network.OnIncomingEvent += OnIncomingEvent;
 		}
 
+	}
+
+	private void OnNewTileEent(object sender, VirtualTile e)
+	{
+		HandTile ht = (HandTile)sender;
+		ht.OnNewTileEent -= OnNewTileEent;
+
+		SyncGame();
 	}
 
 	void ResetGame() {
@@ -61,6 +78,8 @@ public class PieceDirector : MonoBehaviour {
 		totalTurnCounter = 0;
 		activePiece = null;
 		gameOverText.enabled = false;
+
+		SyncGame ();
 	}
 
 	//Resets the current Player's piece.  They cannot match the pieces just
@@ -78,22 +97,35 @@ public class PieceDirector : MonoBehaviour {
 		}
 	}
 
+	void SyncGame ()
+	{
+		if (network != null) {
+			GameEvent e = new GameEvent (GetGameState ());
+			StartCoroutine (network.SetGameState(e));
+		}
+	}
+
 	public void MergeRequested(HandTile piece, GameTile board, VirtualTile.Orientation orientation) {
-		//todo animate merge.
-		activePiece.SetActive (false);
-		activePiece = piece;
-		activePiece.SetActive (true);
-		activePiece = null;
+        //todo animate merge.
+        if (activePiece != null)  //this is for the keyboard interactions.
+        {
+            activePiece.SetActive(false);
+            activePiece = piece;
+            activePiece.SetActive(true);
+            activePiece = null;
+        }
 	
 		if (board.canMergeWith (piece.GetData (), orientation)) {
-			totalTurnCounter++;
 			VirtualTile lastPlayedPiece = new VirtualTile(piece.GetData());
 
+			piece.OnNewTileEent += OnNewTileEent;
 			piece.MergeWithBoard (board, orientation);
-			currentPlayersTurn++;
-			currentPlayersTurn = currentPlayersTurn % NUMBER_OF_PLAYERS;
+
+			SetTotalTurnCounter (totalTurnCounter + 1);
 
 			ResetPieces (lastPlayedPiece);
+
+			SyncGame ();
 
 			RecalculateScore ();
 
@@ -101,6 +133,11 @@ public class PieceDirector : MonoBehaviour {
 		} else {
 			piece.SetActive (false);
 		}
+	}
+
+	private void SetTotalTurnCounter(int turnCounter) {
+		this.totalTurnCounter = turnCounter;
+		currentPlayersTurn = this.totalTurnCounter % NUMBER_OF_PLAYERS;
 	}
 
 	void RecalculateScore() {
@@ -175,12 +212,15 @@ public class PieceDirector : MonoBehaviour {
 		}
 		if (Input.GetKeyDown (KeyCode.LeftArrow)) {
 			activePiece.Reorient ( VirtualTile.Orientation.CounterClockwise90);
+			SyncGame ();
 		}
 		if (Input.GetKeyDown (KeyCode.RightArrow)) {
 			activePiece.Reorient(VirtualTile.Orientation.Clockwise90);
+			SyncGame ();
 		}
 		if (Input.GetKeyDown (KeyCode.UpArrow) || Input.GetKeyDown (KeyCode.DownArrow)) {
 			activePiece.Reorient (VirtualTile.Orientation.UpsideDown);
+			SyncGame ();
 		}
 	}
 
@@ -203,17 +243,21 @@ public class PieceDirector : MonoBehaviour {
 
     public void UpdateGameState(GameState gs)
     {
-        centerBoard1.SetPieceState(gs.boards[0]);
-        centerBoard2.SetPieceState(gs.boards[1]);
+		if (gs.boards.Count == 2) {
+			centerBoard1.SetPieceState (gs.boards [0]);
+			centerBoard2.SetPieceState (gs.boards [1]);
+		}
 
-        for (int i = 0; i < TOTAL_TILES; i++)
+		for (int i = 0; i < TOTAL_TILES && i < gs.pieces.Count; i++)
         {
             if (allPlayerPieces[i] != null)
             {
                 allPlayerPieces[i].SetPieceState(gs.pieces[i]);
             }
         }
-        this.totalTurnCounter = gs.turn;
+		SetTotalTurnCounter(gs.turn);
+
+		RecalculateScore ();
     }
 
 	private void OnIncomingEvent(object sender, GameEvent e)

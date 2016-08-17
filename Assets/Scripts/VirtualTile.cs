@@ -6,7 +6,7 @@ using System;
  * This tile represents both the card that is in the player's hand
  * and the tile on the table.  
  */
-public class VirtualTile  {
+public class VirtualTile :EventArgs {
 
 
 	public enum Orientation {Up = 0, Clockwise90 = 1, UpsideDown = 2, CounterClockwise90 = 3};
@@ -17,7 +17,7 @@ public class VirtualTile  {
 	public static Color green = new Color(0.34f, 0.64f, 0.34f, 0.9f);
 	public static Color blue = new Color(0.27f, 0.54f, 0.86f, 0.9f);
 	public static Color violet = new Color (0.65F, 0.38f, 0.70f, 0.9f);
-	public static Color colorless = new Color(0.87f, 0.89f, 0.91f, 0.9f);
+	public static Color colorless = new Color(0.4f, 0.4f, 0.4f, 0.5f);
 
     static ushort ZERO = 0;
 

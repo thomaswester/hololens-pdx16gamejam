@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 /**
  * Represents a tile in the hand.  It acts like a tile on the board
@@ -9,6 +10,7 @@ public class HandTile : GameTile {
 
 	public bool initalized = false;
 	public float respawnAfter = 2.0f;
+    public PieceDirector director;
 
     GameObject indicator;
     TextMesh indicatorText;
@@ -16,9 +18,12 @@ public class HandTile : GameTile {
     public void init() {
 
         indicator = GameObject.Find("RotateIndicator");
-        indicatorText = indicator.GetComponent<TextMesh>();
+		if (indicator != null) {
+			indicatorText = indicator.GetComponent<TextMesh> ();
+		}
 
         data = new VirtualTile ();
+		HandleNewTileEvent (data);
 		ApplyColors ();
 	}
 
@@ -64,7 +69,9 @@ public class HandTile : GameTile {
         Vector3 vec = transform.eulerAngles;
         float currentY = vec.y;
         float snapY = Mathf.Round(vec.y / 90) * 90;
-        indicatorText.text = vec.y.ToString("n") + ", " + snapY.ToString();
+		if (indicatorText != null) {
+			indicatorText.text = vec.y.ToString ("n") + ", " + snapY.ToString ();
+		}
 
     }
 
@@ -95,8 +102,16 @@ public class HandTile : GameTile {
             {
                 data = data.reoriented(VirtualTile.Orientation.CounterClockwise90);
             }
-        
-            MergeWithBoard(other.gameObject.GetComponent<GameTile>());
+
+            //todo cleanup which class is responsible for the merge and data sync
+            if (director != null)
+            {
+                director.MergeRequested(this, other.gameObject.GetComponent<GameTile>(), VirtualTile.Orientation.Up);
+            }
+            else
+            {
+                MergeWithBoard(other.gameObject.GetComponent<GameTile>());
+            }
         }
     }
 
@@ -133,4 +148,15 @@ public class HandTile : GameTile {
         //set the color
         cube.GetComponent<Renderer>().material.color = d;
     }
+
+	protected virtual void HandleNewTileEvent(VirtualTile e)
+	{
+		EventHandler<VirtualTile> handler = OnNewTileEent;
+		if (handler != null)
+		{
+			handler(this, e);
+		}
+	}
+
+	public event EventHandler<VirtualTile> OnNewTileEent;
 }
